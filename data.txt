@@ -1,0 +1,37 @@
+# .bfnt tool data config
+# notes after '#' are ignored
+# spaces, tabs and empty lines are ignored
+# use KEY : v(v in hex/16) or KEY = v to assign values
+
+
+# DO NOT modify unless you truly knows what you would modify
+# character
+NUM_CHARACTER : 0x22        # Address 0x22-0x23 contains the number of characters
+CHAR_OFFSET : 0x30         # Cmap starts here
+CHAR_SPACE : 0x10           # The info of a character take 0x10 Bytes
+BYTE_SPACE : 0x01           # Size of CHAR_SIZE_X / CHAR_SIZE_Y / VERIFY_CODE
+SHORT_SPACE: 0x02           # Size of NUM_CHARACTER / XPOS / XPOS
+INT_SPACE: 0x04             # Size of NUM_TEXTURE
+CHAR_CODE_OFFSET : 0x00     # The first two Bytes contains the Unicode code of the character
+CHAR_TEXT_OFFSET : 0x02     # Bytes +0x02 & +0x03 contains info about which texture it belongs to
+CHAR_XPOS_OFFSET : 0x04     # Bytes +0x04 & +0x05 contains info about horizontal offset
+CHAR_YPOS_OFFSET : 0x06     # Bytes +0x06 & +0x07 contains info about vertical offset
+CHAR_SIZE_X : 0x08          # Bytes +0x08 contains info about the horizontal size
+CHAR_SIZE_Y : 0x0b          # Bytes +0x0b contains info about the vertical size
+TOTAL_X_OFFSET : float = 0.5
+TOTAL_Y_OFFSET : float = -4.5
+VERIFY_CODE : 0x09          # Bytes +0x09 is used for verify.
+                            # If data[+0x09] == 0x1, it's invalid and should not be displayed
+                            # Currently know nothing about 0x0c-0x0f and 0x0a
+
+# texture
+NUM_TEXTURE : 0x1a          # Address 0x1a-0x1d contains the number of characters
+TEXT_OFFSET : 0x24          # Address 0x24-0x27 contains the offset of texture
+MULTIPLIER : 0x04           # Texture Resolution = 1024 * multiplier
+FONT_NAME : str = "NotoSansSC-Regular.otf"    # Font path. No '#' is allowed in the path
+FONT_SIZE : 0x0d            # Font size (hexadecimal)
+
+# io
+IN_FILE : str = "CreditsRoll.bfnt"
+OUT_DIR : str = './output'
+
