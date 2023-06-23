@@ -18,20 +18,31 @@ CHAR_XPOS_OFFSET : 0x04     # Bytes +0x04 & +0x05 contains info about horizontal
 CHAR_YPOS_OFFSET : 0x06     # Bytes +0x06 & +0x07 contains info about vertical offset
 CHAR_SIZE_X : 0x08          # Bytes +0x08 contains info about the horizontal size
 CHAR_SIZE_Y : 0x0b          # Bytes +0x0b contains info about the vertical size
-TOTAL_X_OFFSET : float = 0.5
-TOTAL_Y_OFFSET : float = -4.5
-VERIFY_CODE : 0x09          # Bytes +0x09 is used for verify.
-                            # If data[+0x09] == 0x1, it's invalid and should not be displayed
-                            # Currently know nothing about 0x0c-0x0f and 0x0a
+TOTAL_X_OFFSET : float = 0
+TOTAL_Y_OFFSET : float = 0
+X_CENTERED : bool = True
+Y_CENTERED : bool = False
+STROKE_WIDTH: Optional[int] = 1
+
+
+VERIFY_CODE_OFFSET : 0x08   # Bytes 0x08 stores a verify code
+VERIFY_OFFSET : 0x08        # Bytes +0x08 is used for verify.
+VERIFY_CODE : 0x101         # If data[+0x08-0x0a] == 0x101 and data[+0x0b] == data[0x08]
+                            # it's invalid and should not be displayed
 
 # texture
-NUM_TEXTURE : 0x1a          # Address 0x1a-0x1d contains the number of characters
+NUM_TEXTURE : 0x1A          # Address 0x1a-0x1d contains the number of characters
+TEXTURE_SIZE : 0x14            # Texture Size
 TEXT_OFFSET : 0x24          # Address 0x24-0x27 contains the offset of texture
 MULTIPLIER : 0x04           # Texture Resolution = 1024 * multiplier
-FONT_NAME : str = "NotoSansSC-Regular.otf"    # Font path. No '#' is allowed in the path
-FONT_SIZE : 0x0d            # Font size (hexadecimal)
+FONT_NAME : str = "microsoftyahei.ttf"    # Font path. No '#' is allowed in the path
+FONT_SIZE : 0x0C            # Font size (hexadecimal)
 
 # io
-IN_FILE : str = "CreditsRoll.bfnt"
+IN_DIR : str = "./input"
 OUT_DIR : str = './output'
 
+# test
+TEST : bool = True
+NO_OUTPUT: bool = False
+LOG : bool = False

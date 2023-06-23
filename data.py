@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 NUM_CHARACTER: int
 CHAR_OFFSET: int
@@ -12,16 +12,25 @@ CHAR_XPOS_OFFSET: int
 CHAR_YPOS_OFFSET: int
 CHAR_SIZE_X: int
 CHAR_SIZE_Y: int
+VERIFY_CODE_OFFSET: int
+VERIFY_OFFSET: int
 VERIFY_CODE: int
 NUM_TEXTURE: int
+TEXTURE_SIZE: int
 TEXT_OFFSET: int
 MULTIPLIER: int
 FONT_NAME: str
 FONT_SIZE: int
 TOTAL_X_OFFSET: float
 TOTAL_Y_OFFSET: float
-IN_FILE: str
+X_CENTERED: bool
+Y_CENTERED: bool
+STROKE_WIDTH: Optional[int]
+IN_DIR: str
 OUT_DIR: str
+TEST: bool
+NO_OUTPUT: bool
+LOG: bool
 
 
 def assign_value(k: str, v: Any) -> None:
@@ -37,16 +46,26 @@ def assign_value(k: str, v: Any) -> None:
     global CHAR_YPOS_OFFSET
     global CHAR_SIZE_X
     global CHAR_SIZE_Y
+    global VERIFY_CODE_OFFSET
+    global VERIFY_OFFSET
     global VERIFY_CODE
     global NUM_TEXTURE
+    global TEXTURE_SIZE
     global TEXT_OFFSET
     global MULTIPLIER
     global FONT_NAME
     global FONT_SIZE
     global TOTAL_X_OFFSET
     global TOTAL_Y_OFFSET
-    global IN_FILE
+    global X_CENTERED
+    global Y_CENTERED
+    global STROKE_WIDTH
+    global IN_DIR
     global OUT_DIR
+    global TEST
+    global NO_OUTPUT
+    global LOG
+    k = k.upper()
     if k == 'NUM_CHARACTER':
         NUM_CHARACTER = v
     elif k == 'CHAR_OFFSET':
@@ -71,10 +90,16 @@ def assign_value(k: str, v: Any) -> None:
         CHAR_SIZE_X = v
     elif k == 'CHAR_SIZE_Y':
         CHAR_SIZE_Y = v
+    elif k == 'VERIFY_CODE_OFFSET':
+        VERIFY_CODE_OFFSET = v
+    elif k == 'VERIFY_OFFSET':
+        VERIFY_OFFSET = v
     elif k == 'VERIFY_CODE':
         VERIFY_CODE = v
     elif k == 'NUM_TEXTURE':
         NUM_TEXTURE = v
+    elif k == 'TEXTURE_SIZE':
+        TEXTURE_SIZE = v
     elif k == 'TEXT_OFFSET':
         TEXT_OFFSET = v
     elif k == 'MULTIPLIER':
@@ -87,10 +112,22 @@ def assign_value(k: str, v: Any) -> None:
         TOTAL_X_OFFSET = v
     elif k == 'TOTAL_Y_OFFSET':
         TOTAL_Y_OFFSET = v
-    elif k == 'IN_FILE':
-        IN_FILE = v
+    elif k == 'X_CENTERED':
+        X_CENTERED = v
+    elif k == 'Y_CENTERED':
+        Y_CENTERED = v
+    elif k == 'STROKE_WIDTH':
+        STROKE_WIDTH = v
+    elif k == 'IN_DIR':
+        IN_DIR = v
     elif k == 'OUT_DIR':
         OUT_DIR = v
+    elif k == 'TEST':
+        TEST = v
+    elif k == 'NO_OUTPUT':
+        NO_OUTPUT = v
+    elif k == 'LOG':
+        LOG = v
 
 
 def load(file_path: str = 'data.txt') -> None:
@@ -101,7 +138,23 @@ def load(file_path: str = 'data.txt') -> None:
             ln += bf
         return ln
 
-    with open(file_path, 'r') as f:
+    def my_cnt(ln: str, ch: str) -> int:
+        if ln.count('\"') not in (0, 2) or ln.count('\'') not in (0, 2) or ln.count('\"') + ln.count(
+                '\'') not in (0, 2):
+            raise RuntimeError('data.txt is corrupted')
+        if '\'' in ln:
+            l__ = ln.index('\'')
+            r__ = ln.rindex('\'')
+            my_ln = ln[:l__] + ln[r__ + 1:]
+        elif '\"' in ln:
+            l__ = ln.index('\"')
+            r__ = ln.rindex('\"')
+            my_ln = ln[:l__] + ln[r__ + 1:]
+        else:
+            my_ln = ln
+        return my_ln.count(ch)
+
+    with open(file_path, 'r', encoding='UTF-8') as f:
         s = f.read().split('\n')
         for line in s:
             if '#' in line:
@@ -109,9 +162,9 @@ def load(file_path: str = 'data.txt') -> None:
                 line = line[:sharp_index]
             if not remove_space(line):
                 continue
-            if line.count(':') + line.count('=') not in (1, 2):
+            if my_cnt(line, ':') + my_cnt(line, '=') not in (1, 2):
                 raise RuntimeError('data.txt is corrupted')
-            if line.count(':') + line.count('=') == 1:
+            if my_cnt(line, ':') + my_cnt(line, '=') == 1:
                 line = remove_space(line)
                 if ':' in line:
                     split_index = line.index(':')
@@ -120,7 +173,7 @@ def load(file_path: str = 'data.txt') -> None:
                 k = line[:split_index]
                 v = int(line[split_index + 1:], 16)
             else:
-                if line.count(':') != 1 or line.count('=') != 1 or line.index('=') < line.index(':'):
+                if my_cnt(line, ':') != 1 or my_cnt(line, '=') != 1 or line.index('=') < line.index(':'):
                     raise RuntimeError('data.txt is corrupted')
                 l_ = line.index(':')
                 r_ = line.index('=')
@@ -139,6 +192,10 @@ def load(file_path: str = 'data.txt') -> None:
                     v = int(v, 16)
                 elif t == 'float':
                     v = float(v)
+                elif t == 'bool':
+                    v = True if v in ('True', '1') else False
+                elif t == 'Optional[int]':
+                    v = None if v == 'None' else int(v)
                 else:
                     raise RuntimeError('data.txt is corrupted')
             assign_value(k, v)
