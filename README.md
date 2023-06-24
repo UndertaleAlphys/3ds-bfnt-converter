@@ -80,7 +80,7 @@ b. 从生成的png里，找出自己需要的。为了方便，可以编写批�
 
 c. 等每张png都找到合适大小时，将生成的文件拖入citra的自定义纹理文件夹，运行试一试，有些问题可以在实测中发现，例如if的标题字库，必须采用垂直居中才能避免显示错误。
 
-d. 等到所有设置都准确无误后，将TEST设定为True，重新生成每张png，大功告成！
+d. 等到所有设置都准确无误后，将TEST设定为False，重新生成每张png，大功告成！
 
 效果：
 ![4](https://github.com/UndertaleAlphys/3ds-bfnt-converter/assets/90361250/73ff9853-ba50-4f76-8238-1e49ca19f1ad)
