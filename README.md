@@ -1,4 +1,8 @@
 # 3ds-bfnt-converter
+更新：
+觉醒的高清字库也已经制作完毕。
+https://github.com/UndertaleAlphys/3ds-bfnt-converter/releases/download/bfnt_converter_Alpha_0.1/awakening.song.zip
+
 3ds上的三作火纹一直没有真正高清化的中文文字。这与其字库文件的特殊性有关。其字库文件后缀为bfnt。bfnt文件不是如bcfnt/bffnt一般被3ds游戏广泛使用的文件格式，就目前而言仅有3ds火纹三部曲和
 
 极少数游戏例如蒸汽世界(STEAMWORLD)使用，因而也没有现成的处理工具。目前唯一能部分处理bfnt的工具FEAT仅能导出低分辨率的纹理图，而对码表无能为力。
